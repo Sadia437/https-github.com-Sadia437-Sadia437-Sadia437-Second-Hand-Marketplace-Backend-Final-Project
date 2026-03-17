@@ -12,8 +12,6 @@ const generateToken = (id) => {
   });
 };
 
-
-
 // @route    POST /api/users/register
 router.post('/register', async (req, res) => {
   try {
@@ -53,26 +51,40 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// @route    POST /api/users/google-login
+// @route    POST /api/users/google-login (Updated for better reliability)
 router.post('/google-login', async (req, res) => {
   try {
     const { name, email, photoURL, googleId } = req.body;
-    if (!email) return res.status(400).json({ message: "Email is required" });
+    
+    if (!email) {
+      return res.status(400).json({ message: "Email is required from Google" });
+    }
 
-    const user = await User.findOrCreateGoogleUser({
-      googleId,
-      email: email.toLowerCase(),
-      name,
-      photoURL
-    });
+   
+    let user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user) {
+      
+      user = await User.create({
+        name,
+        email: email.toLowerCase(),
+        image: photoURL, 
+        role: 'buyer',  
+        authMethod: 'google',
+        isVerified: true
+      });
+    }
 
     const token = generateToken(user._id);
-    res.json({ user: user.toProfileJSON(), token });
+    res.json({ 
+      user: typeof user.toProfileJSON === 'function' ? user.toProfileJSON() : user, 
+      token 
+    });
   } catch (error) {
+    console.error('❌ Google Login Server Error:', error);
     res.status(500).json({ message: 'Google login server error', error: error.message });
   }
 });
-
 
 // @route    GET /api/users/sellers 
 router.get('/sellers', async (req, res) => {
@@ -80,7 +92,6 @@ router.get('/sellers', async (req, res) => {
     const { search } = req.query;
     let query = { role: 'seller' };
 
-    
     if (search) {
       query.name = { $regex: search, $options: 'i' };
     }
