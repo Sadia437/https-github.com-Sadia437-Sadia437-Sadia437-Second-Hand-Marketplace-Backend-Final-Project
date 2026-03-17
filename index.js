@@ -6,23 +6,10 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// --- CORS Configuration (Updated for Netlify) ---
-const allowedOrigins = [
-  'http://localhost:5173',          
-  'http://localhost:5174',         
-  'https://secondhand-marketplac.netlify.app' 
-];
-
+// --- CORS Configuration (Simplest & Most Reliable Version) ---
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
+  // origin: true দেওয়ার মানে হলো রিকোয়েস্ট যে ডোমেইন থেকেই আসুক, সার্ভার তাকে গ্রহণ করবে
+  origin: true, 
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
