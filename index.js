@@ -6,26 +6,22 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// --- CORS Configuration ---
+// --- CORS Configuration (Updated for Netlify) ---
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'https://secondhand-marketplac.netlify.app', 
-  'https://second-hand-marketplace-frontend-fi.vercel.app'
+  'http://localhost:5173',          
+  'http://localhost:5174',         
+  'https://secondhand-marketplac.netlify.app' 
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
-    // Check if the origin is in our allowed list
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      return callback(null, true);
-    } else {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
     }
+    return callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
