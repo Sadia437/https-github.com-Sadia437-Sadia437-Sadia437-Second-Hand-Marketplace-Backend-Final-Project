@@ -8,23 +8,28 @@ const port = process.env.PORT || 5000;
 
 // --- CORS Configuration ---
 const allowedOrigins = [
-  'http://localhost:5173',          // Local development
-  'http://localhost:5174',          // Alternative local port
-  process.env.FRONTEND_URL,         // Live frontend URL (from .env)
-  'https://second-hand-marketplace-frontend-fi.vercel.app' // Your Vercel link
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://secondhand-marketplac.netlify.app', 
+  'https://second-hand-marketplace-frontend-fi.vercel.app'
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    
+    // Check if the origin is in our allowed list
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    } else {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
       return callback(new Error(msg), false);
     }
-    return callback(null, true);
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
