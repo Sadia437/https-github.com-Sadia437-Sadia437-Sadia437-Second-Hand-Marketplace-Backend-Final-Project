@@ -47,7 +47,7 @@ index.js - Server entry point
 | PUT    | /api/users/profile | Update user profile (needs token) |
 
 **Live API Base URL:**  
-[https://second-hand-marketplace-backend-final.onrender.com/api](https://second-hand-marketplace-backend-final.onrender.com/api)
+[https://second-hand-marketplace-fin-git-f482a4-sadias-projects-bf071fed.vercel.app/](second-hand-marketplace-final-project-akwk6p642.vercel.app)
 
 ---
 
@@ -55,7 +55,7 @@ index.js - Server entry point
 
 ```bash
 # Clone backend repo
-git clone https://github.com/Sadia437/Second-Hand-Marketplace-Backend-Final.git
+git clone https://github.com/Sadia437/https-github.com-Sadia437-Sadia437-Sadia437-Second-Hand-Marketplace-Backend-Final-Project.git
 
 # Navigate to folder
 cd Second-Hand-Marketplace-Backend-Final
